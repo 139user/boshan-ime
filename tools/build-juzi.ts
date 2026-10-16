@@ -115,7 +115,7 @@ export function buildSentences(readings: Readings, corpusDir: string) {
  *    =<三个字母>\t<句号*1024+汉字序号>,…   索引:每个小句开头处的前三个首字母(多音字展开)→ 从哪儿开始
  *  索引在这里算好,lua 那边加载时只按行存字符串,不用逐字扫(手机上逐字扫一遍要好几秒) */
 async function writeJuzi(file: string, srcs: string[], sentences: Sentence[]) {
-  const lines = ['# 博山句库:先秦儒道典籍原文,tools/build-juzi.ts 生成,勿手改', '# 来源:银汉时空 https://sky.boshanlu.com']
+  const lines = ['# 博山句库:先秦儒道典籍原文,tools/build-juzi.ts 生成,勿手改']
   srcs.forEach((s, i) => lines.push(`@${i}\t${s}`))
   const index = new Map<string, number[]>()
   sentences.forEach((s, i) => {

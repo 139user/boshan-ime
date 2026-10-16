@@ -56,4 +56,4 @@ tools/publish.sh android|windows|macos <文件>            # 挂到后台首页�
 ## 许可
 
 博山自己的方案、脚本与代码按 GPL-3.0(跟雾凇拼音、小狼毫、鼠须管一致)。数据与字体各按其许可:雾凇拼音 GPL-3.0、OpenCC 数据 Apache-2.0、
-博山篆字体 SIL OFL 1.1、Unicode 数据 Unicode License v3;典籍原文来自[银汉时空](https://sky.boshanlu.com)。
+博山篆字体 SIL OFL 1.1、Unicode 数据 Unicode License v3。

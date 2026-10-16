@@ -87,7 +87,7 @@ class SettingsActivity : Activity() {
 
     add(card(text("试一试", 16f, bold = true), EditText(this).apply { hint = "在这里试打" ; minLines = 3 }))
 
-    add(text("版本 ${BuildConfig.VERSION_NAME}\n基于 Rime(librime)与雾凇拼音;小篆字形来自开元小篆(SIL OFL 1.1),简繁与小篆对照来自 OpenCC;典籍原文来自银汉时空 sky.boshanlu.com。", 12f, Color.parseColor("#888888")))
+    add(text("版本 ${BuildConfig.VERSION_NAME}\n基于 Rime(librime)与雾凇拼音;小篆字形来自开元小篆(SIL OFL 1.1),简繁与小篆对照来自 OpenCC。", 12f, Color.parseColor("#888888")))
 
     setContentView(ScrollView(this).apply { addView(col) })
   }

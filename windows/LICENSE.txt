@@ -8,7 +8,6 @@
 · OpenCC 简繁与小篆对照数据:Apache-2.0,https://github.com/BYVoid/OpenCC
 · 博山篆字体(由开元小篆 Kaiyuan Small Seal 重描、改名):SIL Open Font License 1.1,
   https://github.com/frankslin/kaiyuan-small-seal-font
-· 先秦儒道典籍原文(道德经、论语、孟子、荀子、礼记、周易、管子):来自银汉时空 https://sky.boshanlu.com
 · Unicode 字符数据(Unihan、SealSources):Unicode License v3
 
 博山输入法自己的方案、脚本与工具按 GPL-3.0 发布。

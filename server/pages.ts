@@ -40,7 +40,7 @@ ${item('android', '安卓', '自带键盘;装好后在系统"语言和输入法"
 ${item('windows', 'Windows', '基于小狼毫(Rime);安装包会一并装好小狼毫、博山方案与小篆字体')}
 ${item('macos', 'macOS', '基于鼠须管(Rime);安装后在"系统设置 → 键盘 → 输入法"里添加')}
 <p class="muted">基于 <a href="https://rime.im">Rime</a> 与 <a href="https://github.com/iDvel/rime-ice">雾凇拼音</a>;
-小篆字形来自<a href="https://github.com/frankslin/kaiyuan-small-seal-font">开元小篆</a>(SIL OFL 1.1);典籍原文来自<a href="https://sky.boshanlu.com">银汉时空</a>。</p>
+小篆字形来自<a href="https://github.com/frankslin/kaiyuan-small-seal-font">开元小篆</a>(SIL OFL 1.1)。</p>
 </body></html>`
 }
 
