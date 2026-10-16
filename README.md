@@ -23,7 +23,7 @@
 快捷键(桌面):`Ctrl+Shift+4` 简 → 繁 → 篆、`Ctrl+Shift+5` 小篆提示开关、`Ctrl+Shift+6` 篆图开关;`F4` / ``Ctrl+` `` 方案选单里也能切。
 安卓:工具栏「简」点一下轮换、长按开关小篆提示;「篆图」开关篆图模式(输入框里先选中字再点则直接把选中的做成图片)。
 
-cowork 的安卓键盘也是这个库(`tools/sync-cowork.sh` 同步过去),cowork 在上面加了语音和跨设备。
+cowork 的安卓键盘也是这个库:cowork 以 git 子模块引用本仓库(环境变量 `COWORK_IME=1` 时集成),在上面加了语音和跨设备(见 docs/android.md)。
 
 ## 目录
 
@@ -32,7 +32,7 @@ corpus/      典籍原文(sky.boshanlu.com 抓的,简繁对照),tools/fetch-corp
 rime/        博山方案(boshan.schema.yaml)、主词库入口、default 补丁、lua/boshan/*(联想、小篆提示、篆图、开关记忆)
 tools/       数据构建:build-rime.ts(总入口)、build-juzi.ts(句库与典籍词库)、build-seal.ts(简繁篆 OpenCC 数据)、
              build-font.py + retrace-glyphs.sh(博山篆字体)、readings.ts(字音)、fetch.ts + lock.json(外部来源锁定)、
-             prepare-android.ts、laptop-android.sh、publish.sh、sync-cowork.sh、rime-test/(本机实测方案的小程序)
+             prepare-android.ts、laptop-android.sh、publish.sh、rime-test/(本机实测方案的小程序)
 android/     安卓:ime(键盘库)、app(独立 App)
 windows/     NSIS 安装脚本、博山助手(PowerShell)、小狼毫样式补丁、build.sh
 macos/       pkg 打包脚本、安装后脚本、篆图脚本(JXA)、鼠须管样式补丁、定时取设置
@@ -49,7 +49,6 @@ bun tools/prepare-android.ts && tools/laptop-android.sh   # 安卓(在笔记本�
 windows/build.sh                        # Windows(VPS 上 makensis)→ build/dist/boshan-setup-<版本>.exe
 gh workflow run macos.yml -R 139user/boshan-ime          # macOS(Actions),gh run download 取回
 tools/publish.sh android|windows|macos <文件>            # 挂到后台首页的下载
-tools/sync-cowork.sh                    # 键盘库同步进 cowork
 ```
 
 后台:https://boshan.zhilin.cowork.nj7.uk(管理页 `/admin`,初始口令在 VPS 的 `/var/lib/boshan/admin-initial-password.txt`)。

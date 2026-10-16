@@ -5,7 +5,8 @@
 - 特色:简 / 繁 / 篆三态、候选旁显示常用字小篆(管理员在后台定默认值,用户可关)、篆图(小篆图片)、先秦儒道典籍首字母整句联想。
 - 典籍范围**只限**:道德经、论语、孟子、荀子、礼记(含学记)、周易、管子(`tools/fetch-corpus.ts` 的 BOOKS)。别往里加别的书。
 - 小篆只做常用 3500 字(《通用规范汉字表》一级字表)及其繁体;字体只收这些字的篆形。
-- cowork 的安卓键盘就是 `android/ime` 这个库,cowork 在上面加语音、跨设备(见 docs/android.md 的"在 cowork 里")。改了库要用 `tools/sync-cowork.sh` 同步过去。
+- cowork 的安卓键盘就是 `android/ime` 这个库:cowork 以 git 子模块引用本仓库(`COWORK_IME=1` 时集成),在上面加语音、跨设备(见 docs/android.md 的"在 cowork 里")。
+  库的扩展点(`BoshanIme` 的 open / protected 成员)改了,cowork 的 `CoworkIme` 要跟着改;本仓库是公开的,别提交密钥、口令、内网地址。
 
 ## 代码
 - 构建工具 Bun + TS(`tools/`),字体脚本 Python(fontTools);后台 Bun(`server/`);安卓 Kotlin + JNI(librime)。

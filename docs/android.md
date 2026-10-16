@@ -40,8 +40,13 @@ tools/laptop-android.sh         # 传到笔记本 C:\code\boshan-ime 编 :app:as
 
 ## 在 cowork 里
 
-- `tools/sync-cowork.sh`:把 `android/ime`(源码与构建脚本,不含 assets 与 prebuilt)rsync 到 cowork 的 `client/src-tauri/gen/android/boshan-ime/`,写 `VENDOR.md` 记来源提交。
-- cowork 的 `CoworkIme` 继承 `BoshanIme`,加 说到电脑 / 麦克风 / 剪贴板 三个按钮、剪贴板面板、长按空格说话、状态文字;小篆提示的默认值由 cowork 管理员在管理面板"语音与键盘"里定,
-  键盘经旁路连接的 `ime.config` 取来写进 `boshan_defaults.txt`(不访问博山后台)。
-- cowork 的 `prepare-tools.ts android` 从博山后台下载数据包(`tools.lock.json` 的 `rime.data`,地址 + SHA-256),放进 `boshan-ime/src/main/assets`。
-  博山这边发布了新数据包,cowork 要改那里的地址和哈希才会换。
+cowork 把 boshan-ime 仓库作为 git 子模块挂在 `client/src-tauri/gen/android/boshan-ime`,Gradle 直接用子模块里的 `android/ime`(模块名 `:boshan-ime`)。
+**是否集成由环境变量 `COWORK_IME=1` 控制**,默认不集成:不设时不需要子模块,cowork 照样能编(安卓包里就没有键盘);cowork 自己的构建(Actions、笔记本的
+`build-all.ps1`、发版)都设了 `COWORK_IME=1`。
+
+- cowork 的键盘部分在它自己的模块 `:cowork-ime`(`gen/android/cowork-ime`):`CoworkIme` 继承 `BoshanIme`,加 说到电脑 / 麦克风 / 剪贴板 三个按钮、剪贴板面板、
+  长按空格说话、状态文字;小篆提示的默认值由 cowork 管理员在管理面板"语音与键盘"里定,键盘经旁路连接的 `ime.config` 取来写进 `boshan_defaults.txt`(不访问博山后台)。
+- cowork 的 `prepare-tools.ts android`(`COWORK_IME=1` 时)下载预编译 librime 到子模块的 `android/ime/src/main/cpp/prebuilt`、从博山后台下载数据包
+  (cowork `tools.lock.json` 的 `rime.data`,地址 + SHA-256)解到 `android/ime/src/main/assets`,这两处在本仓库的 `.gitignore` 里,子模块保持干净。
+- 改了键盘库:在本仓库提交推送,cowork 里 `git -C client/src-tauri/gen/android/boshan-ime pull` 再提交子模块指针。发布了新数据包,cowork 要改 `tools.lock.json` 的地址和哈希。
+- 因为同一份库要在 cowork 里编,AGP / Kotlin 版本要跟 cowork 一致;库的扩展点(`BoshanIme` 的 open / protected 成员)改了要同时改 cowork 的 `CoworkIme`。
