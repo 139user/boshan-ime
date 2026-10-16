@@ -17,5 +17,8 @@
 ## 机器
 - 代码在 VPS 上写;VPS 内存小,不做安卓构建、不做类型检查。
 - 安卓构建在笔记本(Windows,SSH `<笔记本>`,pwsh),仓库位置 `C:\code\boshan-ime`:把 `android/`(含准备好的 assets、prebuilt)与 `version.txt` 传过去,`cd android; .\gradlew.bat :app:assembleRelease`。
-- macOS 安装包只能在 GitHub Actions 上打(私有仓库 139user/boshan-ime)。
+- Windows 安装包在 VPS 上用 makensis 编:`windows/build.sh`。
+- macOS 安装包只能在 GitHub Actions 上打(私有仓库 139user/boshan-ime):`gh workflow run macos.yml -R 139user/boshan-ime`,`gh run download` 取回。
+- 发布到后台下载:`tools/publish.sh data|android|windows|macos <文件>`。数据包换了,cowork 的 `client/scripts/tools.lock.json` 的 `rime.data` 要跟着改。
+- 设计说明在 `docs/`(data.md 方案与数据、android.md、desktop.md、server.md),改了行为同步改文档。
 - 后台跑在 VPS 上:systemd `boshan.service`,端口 18930,公网 https://boshan.zhilin.cowork.nj7.uk ,数据目录 /var/lib/boshan。
