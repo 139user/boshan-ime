@@ -4,7 +4,9 @@
 # 先跑:bun tools/build-rime.ts && bun tools/prepare-android.ts
 set -euo pipefail
 cd "$(dirname "$0")/.."
-HOST=${LAPTOP:-<笔记本>}
+# 笔记本的 SSH 地址:环境变量 LAPTOP,或 ~/.config/boshan-ime/laptop 里的一行(不入库)
+HOST=${LAPTOP:-$(cat ~/.config/boshan-ime/laptop 2>/dev/null || true)}
+[[ -n $HOST ]] || { echo "设一下笔记本的 SSH 地址:LAPTOP=用户@主机,或写进 ~/.config/boshan-ime/laptop" >&2; exit 1; }
 TASK=${1:-:app:assembleRelease}
 ssh "$HOST" 'New-Item -ItemType Directory -Force C:\code\boshan-ime\signing | Out-Null'
 # 正式签名:密钥在 VPS 的 ~/.config/boshan-ime/(release.jks + keystore-password),每次传过去;没有就用 debug 签名
