@@ -35,18 +35,19 @@ async function run(cmd: string[], cwd?: string): Promise<void> {
 async function untar(tgz: string, name: string, root: string, members?: string[]): Promise<string> {
   const dir = join(CACHE, name)
   const stamp = join(dir, '.ok')
-  if (existsSync(stamp) && (await readFile(stamp, 'utf8')) === tgz) return join(dir, root)
+  const tag = [tgz, ...(members ?? [])].join('\n') // 换了包或换了要解的文件都重解
+  if (existsSync(stamp) && (await readFile(stamp, 'utf8')) === tag) return join(dir, root)
   await rm(dir, { recursive: true, force: true })
   await mkdir(dir, { recursive: true })
   await run(['tar', 'xzf', tgz, '-C', dir, ...(members ?? []).map((m) => `${root}/${m}`)])
-  await writeFile(stamp, tgz)
+  await writeFile(stamp, tag)
   return join(dir, root)
 }
 
 export async function rimeIce(): Promise<string> {
   const r = lock.rimeIce
   const tgz = await download(r.url, r.sha256, join(CACHE, 'dl', 'rime-ice.tgz'))
-  return untar(tgz, 'rime-ice', r.root, r.members)
+  return untar(tgz, 'rime-ice', r.root, [...r.members, ...r.extract])
 }
 
 /** OpenCC 数据文件,返回 {相对路径: 本地路径} */

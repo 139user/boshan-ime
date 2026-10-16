@@ -1,6 +1,6 @@
 {
   "rimeIce": {
-    "note": "雾凇拼音 GPL-3.0,固定提交;与 cowork 原来用的同一版",
+    "note": "雾凇拼音 GPL-3.0,固定提交;与 cowork 原来用的同一版。members 拷进数据包;extract 只解出来供生成数据用(41448 大字表给字音)",
     "url": "https://codeload.github.com/iDvel/rime-ice/tar.gz/da1fbe602e38f26db846fa10120ee64c2b0324c0",
     "sha256": "6e6c0e8c00b969690dbc8b394b0a8f8cb0ed3ad348297ad631de1790c693eebb",
     "root": "rime-ice-da1fbe602e38f26db846fa10120ee64c2b0324c0",
@@ -24,6 +24,9 @@
       "en_dicts/cn_en.txt",
       "lua",
       "opencc"
+    ],
+    "extract": [
+      "cn_dicts/41448.dict.yaml"
     ]
   },
   "opencc": {
