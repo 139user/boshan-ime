@@ -20,10 +20,14 @@ cp macos/com.boshanlu.ime.defaults.plist "$P/Library/LaunchAgents/"
 chmod 755 macos/scripts/postinstall
 pkgbuild --root "$P" --scripts macos/scripts --identifier com.boshanlu.ime --version "$VER" --install-location / "$W/boshan-component.pkg"
 
-# 鼠须管官方安装包拆出组件包(产品包不能套产品包)
+# 鼠须管官方安装包:本身是组件包就原样用;是产品包(带 Distribution)就拆出里面的组件包(产品包不能套产品包)
 pkgutil --expand "$SQPKG" "$W/sq"
-n=0
-for c in "$W"/sq/*.pkg; do pkgutil --flatten "$c" "$W/squirrel-$n.pkg"; n=$((n+1)); done
+if [ -f "$W/sq/Distribution" ]; then
+  n=0
+  for c in "$W"/sq/*.pkg; do pkgutil --flatten "$c" "$W/squirrel-$n.pkg"; n=$((n+1)); done
+else
+  cp "$SQPKG" "$W/squirrel-0.pkg"
+fi
 
 # 合成产品包:先鼠须管,后博山
 cd "$W"
