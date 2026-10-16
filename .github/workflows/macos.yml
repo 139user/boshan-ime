@@ -1,0 +1,39 @@
+# macOS 安装包只能在 macOS 上打:官方鼠须管 + 博山组件(macos/build-pkg.sh)。
+# 数据包取博山后台上最新发布的那份(/api/config 的 releases.data,按其中的 SHA-256 校验),也可以手动给地址。
+# 打好的 pkg 作为构建产物上传;发布到博山后台由 VPS 上 gh run download 取回后 tools/publish.sh macos 放上去。
+name: macOS 安装包
+on:
+  workflow_dispatch:
+    inputs:
+      data_url:
+        description: 博山数据包 zip 的地址(不填 = 后台最新发布的)
+        required: false
+jobs:
+  pkg:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 取数据包与鼠须管官方安装包
+        env:
+          DATA_URL: ${{ inputs.data_url }}
+        run: |
+          set -euo pipefail
+          if [ -z "$DATA_URL" ]; then
+            curl -fsS https://boshan.zhilin.cowork.nj7.uk/api/config -o config.json
+            file=$(python3 -c 'import json;print(json.load(open("config.json"))["releases"]["data"]["file"])')
+            sha=$(python3 -c 'import json;print(json.load(open("config.json"))["releases"]["data"]["sha256"])')
+            curl -fsSL -o data.zip "https://boshan.zhilin.cowork.nj7.uk/download/$file"
+            echo "$sha  data.zip" | shasum -a 256 -c
+          else
+            curl -fsSL -o data.zip "$DATA_URL"
+          fi
+          url=$(python3 -c 'import json;print(json.load(open("tools/lock.json"))["squirrel"]["url"])')
+          sha=$(python3 -c 'import json;print(json.load(open("tools/lock.json"))["squirrel"]["sha256"])')
+          curl -fsSL -o squirrel.pkg "$url"
+          echo "$sha  squirrel.pkg" | shasum -a 256 -c
+      - name: 打包
+        run: macos/build-pkg.sh data.zip squirrel.pkg
+      - uses: actions/upload-artifact@v4
+        with:
+          name: boshan-macos
+          path: build/dist/*.pkg

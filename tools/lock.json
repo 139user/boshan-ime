@@ -105,5 +105,17 @@
         "sha256": "5a3a443dd099e543db6e5a79f1bd01258b52c379d4c20394ae81396c8a941ba0"
       }
     ]
+  },
+  "weasel": {
+    "note": "小狼毫官方安装包(GPL-3.0,原样打进 Windows 安装包;没装小狼毫时静默安装)",
+    "version": "0.17.4",
+    "url": "https://github.com/rime/weasel/releases/download/0.17.4/weasel-0.17.4.0-installer.exe",
+    "sha256": "cf509534a8f5f8af9c98ed7cbb8f135439f145a8cbe7e50ede42bb5b5ab45c29"
+  },
+  "squirrel": {
+    "note": "鼠须管官方安装包(GPL-3.0,拆出组件包合进 macOS 安装包)",
+    "version": "1.1.2",
+    "url": "https://github.com/rime/squirrel/releases/download/1.1.2/Squirrel-1.1.2.pkg",
+    "sha256": "614746013212937623d5bbab9901e9c43d1ec937aa32307d6b6092a05e308287"
   }
 }

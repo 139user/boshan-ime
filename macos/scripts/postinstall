@@ -1,0 +1,27 @@
+#!/bin/bash
+# 博山输入法 macOS 安装包的安装后脚本(root 跑)。鼠须管本身由同一个安装包里的官方组件装好;这里给当前登录用户:
+#   博山方案与数据放进 ~/Library/Rime(原有的 default.custom.yaml、squirrel.custom.yaml 先备份到 boshan-backup),
+#   篆图脚本、取一次管理员默认设置、启动定时取设置的 LaunchAgent,最后让鼠须管重新部署。
+SRC="/Library/Application Support/BoshanIME"
+user=$(stat -f %Su /dev/console)
+[ -z "$user" ] || [ "$user" = root ] && exit 0
+uid=$(id -u "$user")
+home=$(dscl . -read "/Users/$user" NFSHomeDirectory | awk '{print $2}')
+RIME="$home/Library/Rime"
+as_user() { launchctl asuser "$uid" sudo -u "$user" "$@"; }
+
+as_user mkdir -p "$RIME/boshan-backup" "$RIME/boshan"
+for f in default.custom.yaml squirrel.custom.yaml; do
+  if [ -f "$RIME/$f" ] && [ ! -f "$RIME/boshan-backup/$f" ] && ! grep -q boshan "$RIME/$f"; then
+    as_user cp "$RIME/$f" "$RIME/boshan-backup/$f"
+  fi
+done
+as_user ditto "$SRC/rime" "$RIME"
+as_user cp "$SRC/squirrel.custom.yaml" "$RIME/squirrel.custom.yaml"
+as_user cp "$SRC/seal_image.js" "$RIME/boshan/seal_image.js"
+as_user /bin/bash "$SRC/update-defaults.sh"
+launchctl bootout "gui/$uid/com.boshanlu.ime.defaults" 2>/dev/null
+launchctl bootstrap "gui/$uid" /Library/LaunchAgents/com.boshanlu.ime.defaults.plist 2>/dev/null
+SQ="/Library/Input Methods/Squirrel.app/Contents/MacOS/Squirrel"
+[ -x "$SQ" ] && as_user "$SQ" --reload
+exit 0

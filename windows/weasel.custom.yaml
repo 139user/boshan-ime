@@ -1,0 +1,26 @@
+# 博山输入法叠在小狼毫 weasel.yaml 上的补丁:候选窗字体带上博山篆(小篆在 Unicode 第三平面,微软雅黑里没有,往后退到博山篆),
+# 注释(小篆提示、典籍出处)同样;横排候选,配色用一套米色纸、墨色字、朱红高亮。
+patch:
+  style/font_face: "Microsoft YaHei, Boshan Seal"
+  style/label_font_face: "Microsoft YaHei"
+  style/comment_font_face: "Microsoft YaHei, Boshan Seal"
+  style/font_point: 14
+  style/comment_font_point: 14
+  style/horizontal: true
+  style/inline_preedit: false
+  style/color_scheme: boshan
+  preset_color_schemes/boshan:
+    name: 博山
+    author: 博山输入法
+    back_color: 0xDFEFF6
+    border_color: 0xC7D3DC
+    text_color: 0x18212B
+    hilited_text_color: 0x18212B
+    hilited_back_color: 0xDFEFF6
+    hilited_candidate_text_color: 0xFFFFFF
+    hilited_candidate_back_color: 0x1E2DB2
+    hilited_comment_text_color: 0xE4F3FB
+    candidate_text_color: 0x18212B
+    comment_text_color: 0x5A6470
+    label_color: 0x8A949E
+    hilited_label_color: 0xE4F3FB

@@ -1,0 +1,16 @@
+博山输入法
+
+本安装包包含以下组件,各按其许可证发布:
+
+· 小狼毫(Weasel)输入法程序:GPL-3.0,https://github.com/rime/weasel(官方原版安装包,未改动)
+· Rime 输入法引擎(librime)及其插件:BSD-3-Clause 等,https://github.com/rime/librime
+· 雾凇拼音(rime-ice)词库与 Lua 脚本:GPL-3.0,https://github.com/iDvel/rime-ice
+· OpenCC 简繁与小篆对照数据:Apache-2.0,https://github.com/BYVoid/OpenCC
+· 博山篆字体(由开元小篆 Kaiyuan Small Seal 重描、改名):SIL Open Font License 1.1,
+  https://github.com/frankslin/kaiyuan-small-seal-font
+· 先秦儒道典籍原文(道德经、论语、孟子、荀子、礼记、周易、管子):来自银汉时空 https://sky.boshanlu.com
+· Unicode 字符数据(Unihan、SealSources):Unicode License v3
+
+博山输入法自己的方案、脚本与工具按 GPL-3.0 发布。
+安装程序会在没有小狼毫时一并安装小狼毫,并把博山方案放进小狼毫的用户目录(%APPDATA%\Rime),
+原有的 default.custom.yaml、weasel.custom.yaml 会先备份到 %APPDATA%\Rime\boshan-backup。

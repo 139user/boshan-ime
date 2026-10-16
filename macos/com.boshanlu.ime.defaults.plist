@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- 博山输入法:每 6 小时取一次管理员定的默认设置(每个登录用户各跑各的) -->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.boshanlu.ime.defaults</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Library/Application Support/BoshanIME/update-defaults.sh</string>
+  </array>
+  <key>RunAtLoad</key><true/>
+  <key>StartInterval</key><integer>21600</integer>
+</dict>
+</plist>

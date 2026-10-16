@@ -12,10 +12,10 @@ object CandText {
     val sb = SpannableStringBuilder(c.text).append(' ')
     val start = sb.length
     sb.append(c.comment)
-    // 小篆提示照原大小(太小看不清笔画),出处之类的文字注释小一号
-    val size = if (SealMap.hasSeal(c.comment) && !c.comment.startsWith("〔")) 0.9f else 0.6f
-    sb.setSpan(RelativeSizeSpan(size), start, sb.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-    sb.setSpan(ForegroundColorSpan(theme.textMuted), start, sb.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+    // 小篆提示照原大小、颜色深一些(太小太淡看不清笔画);出处之类的文字注释小一号、灰色
+    val seal = SealMap.hasSeal(c.comment) && !c.comment.startsWith("〔")
+    sb.setSpan(RelativeSizeSpan(if (seal) 1f else 0.6f), start, sb.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+    sb.setSpan(ForegroundColorSpan(if (seal) theme.icon else theme.textMuted), start, sb.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
     return sb
   }
 }

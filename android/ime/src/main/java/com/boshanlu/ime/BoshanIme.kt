@@ -198,6 +198,9 @@ open class BoshanIme : InputMethodService(), KeyboardView.Listener {
 
   // ---- 简 / 繁 / 篆、小篆提示、篆图 ----
 
+  /** 宿主改了 boshan_defaults.txt(管理员默认值)之后调,马上按新值来 */
+  protected fun reloadPrefs() = applyPrefs()
+
   /** 按 用户选择 > 管理员默认 > 方案默认 把小篆提示设到引擎上(键盘每次弹出、后台默认值变了时) */
   private fun applyPrefs() {
     if (!RimeEngine.ready) return
