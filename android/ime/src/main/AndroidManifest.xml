@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <!-- 篆图:小篆图片经它给出去(commitContent / 剪贴板),见 SealImage.kt -->
+        <provider
+            android:name="com.boshanlu.ime.SealFileProvider"
+            android:authorities="${applicationId}.boshan.seal"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/boshan_seal_paths" />
+        </provider>
+    </application>
+</manifest>

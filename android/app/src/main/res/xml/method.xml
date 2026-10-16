@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 博山输入法的输入法声明:一个子类型,中文、英文、简繁篆都在同一个键盘里切 -->
+<input-method xmlns:android="http://schemas.android.com/apk/res/android"
+    android:settingsActivity="com.boshanlu.ime.app.SettingsActivity"
+    android:supportsSwitchingToNextInputMethod="true">
+    <subtype
+        android:label="@string/ime_subtype"
+        android:imeSubtypeLocale="zh_CN"
+        android:imeSubtypeMode="keyboard" />
+</input-method>

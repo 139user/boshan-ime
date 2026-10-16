@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">博山输入法</string>
+    <string name="ime_name">博山输入法</string>
+    <string name="ime_subtype">中文(拼音 · 简繁篆)</string>
+</resources>

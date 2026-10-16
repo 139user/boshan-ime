@@ -1,0 +1,257 @@
+# Rime schema
+# encoding: utf-8
+#
+# 博山拼音:博山输入法的主方案。底子是雾凇拼音(rime-ice,GPL-3.0)的 rime_ice.schema.yaml,在它上面加了:
+# - 简 / 繁 / 篆 三态切换(篆 = Unicode 18.0 篆书区块的小篆字符,OpenCC s2seal)
+# - 候选旁显示小篆(seal_hint,默认值由管理员在博山后台定,用户的选择记在 boshan_prefs.txt)
+# - 先秦儒道典籍句库:打每个字的拼音首字母,联想出整句(lua/boshan/juzi.lua)
+# - 典籍小句挂进主词库,全拼也能直接打出(cn_dicts/boshan_classics.dict.yaml)
+# 改动雾凇原有部分的地方都标了「博山」。
+
+schema:
+  schema_id: boshan
+  name: 博山拼音
+  version: "1.0"
+  author:
+    - 博山输入法
+    - Dvel(雾凇拼音)
+  description: |
+    博山输入法:简繁篆三态输入、小篆提示、先秦儒道典籍首字母整句联想。
+    基于雾凇拼音 https://github.com/iDvel/rime-ice
+  dependencies:
+    - melt_eng        # 英文输入,作为次翻译器挂载到拼音方案
+    - radical_pinyin  # 部件拆字,反查及辅码
+
+switches:
+  - name: ascii_mode
+    states: [ 中, Ａ ]
+  - name: ascii_punct
+    states: [ ¥, $ ]
+  # 博山:简 / 繁 / 篆 三选一(取代雾凇的 traditionalization 开关;选项名沿用,方便旧配置)
+  - options: [ simplification, traditionalization, seal ]
+    states: [ 简, 繁, 篆 ]
+  # 博山:候选旁显示小篆。不写 reset —— 默认值由 lua/boshan/prefs.lua 按 管理员默认 / 用户选择 设
+  - name: seal_hint
+    states: [ 无篆, 示篆 ]
+  # 博山:选字时出小篆图片(桌面端,由博山助手渲染进剪贴板并粘贴;安卓键盘有自己的按钮,不用这个开关)
+  - name: seal_image
+    states: [ 文字, 篆图 ]
+    reset: 0
+  - name: emoji
+    states: [ 💀, 😄 ]
+    reset: 1
+  - name: full_shape
+    states: [ 半角, 全角 ]
+  - name: search_single_char
+    states: [正常, 单字]
+    abbrev: [词, 单]
+
+engine:
+  processors:
+    - lua_processor@*boshan.prefs       # 博山:按管理员默认值 / 用户选择设好小篆提示开关,并记住用户的切换
+    - lua_processor@*boshan.seal_image  # 博山:篆图模式下选字 → 交给博山助手出图
+    - lua_processor@*select_character   # 以词定字
+    - ascii_composer
+    - recognizer
+    - key_binder
+    - speller
+    - punctuator
+    - selector
+    - navigator
+    - express_editor
+  segmentors:
+    - ascii_segmentor
+    - matcher
+    - abc_segmentor
+    - affix_segmentor@radical_lookup
+    - punct_segmentor
+    - fallback_segmentor
+  translators:
+    - punct_translator
+    - script_translator
+    - lua_translator@*boshan.juzi        # 博山:典籍首字母整句联想
+    - lua_translator@*date_translator
+    - lua_translator@*lunar
+    - lua_translator@*uuid
+    - table_translator@custom_phrase
+    - table_translator@melt_eng
+    - table_translator@cn_en
+    - table_translator@radical_lookup
+    - lua_translator@*unicode
+    - lua_translator@*number_translator
+    - lua_translator@*calc_translator
+    - lua_translator@*force_gc
+  filters:
+    - lua_filter@*corrector
+    - reverse_lookup_filter@radical_reverse_lookup
+    - lua_filter@*autocap_filter
+    - lua_filter@*v_filter
+    - lua_filter@*pin_cand_filter
+    - lua_filter@*long_word_filter
+    - lua_filter@*reduce_english_filter
+    - lua_filter@*boshan.juzi_filter     # 博山:输入本身是正常全拼时,把整句联想挪到前两个候选之后
+    - simplifier@emoji
+    - simplifier@traditionalize
+    - simplifier@seal                    # 博山:篆
+    - lua_filter@*search@radical_pinyin
+    - lua_filter@*boshan.seal_hint       # 博山:候选旁显示小篆
+    - uniquifier
+
+# 博山自己的设置
+boshan:
+  seal_hint_default: true    # 管理员没给默认值(boshan_defaults.txt)、用户也没选过时用这个(与后台缺省一致)
+  seal_hint_max_length: 1    # 几个字以内的候选显示小篆(1 = 只给单字显示)
+  juzi:
+    min_length: 4            # 至少打几个首字母才联想
+    full_pinyin_min_length: 6  # 输入本身是正常全拼时,至少这么长才联想
+    full_pinyin_index: 3     # 输入本身是正常全拼时,联想结果排到第几个候选
+    max_results: 6           # 最多几条
+    max_chars: 60            # 补全整句时最长多少字
+
+date_translator:
+  date: rq
+  time: sj
+  week: xq
+  datetime: dt
+  timestamp: ts
+  datezh: rqzh
+  dateen: rqen
+
+lunar: nl
+lunar_template: "{干支年}{生肖}年{俗称农历月}{农历日}"
+
+uuid: uuid
+
+long_word_filter:
+  count: 2
+  idx: 4
+
+reduce_english_filter:
+  mode: all
+  idx: 2
+
+pin_cand_filter:
+  - d	的
+  - m	吗 嘛
+  - hm	后面
+
+translator:
+  dictionary: boshan            # 博山:boshan.dict.yaml(雾凇词库 + 大字表 + 典籍小句)
+  enable_word_completion: true
+  spelling_hints: 8
+  always_show_comments: true
+  initial_quality: 1.2
+  comment_format:
+    - xform/^/［/
+    - xform/$/］/
+  preedit_format:
+    - xform/([jqxy])v/$1u/
+    - xform/([nl])v/$1v/
+    - xform/([nl])ue/$1ve/
+    - xform/(?<=[A-Z])\s(?=[A-Z])//
+
+melt_eng:
+  dictionary: melt_eng
+  enable_sentence: false
+  enable_user_dict: false
+  initial_quality: 1.1
+  comment_format:
+    - xform/.*//
+
+cn_en:
+  dictionary: ""
+  user_dict: en_dicts/cn_en
+  db_class: stabledb
+  enable_completion: true
+  enable_sentence: false
+  initial_quality: 0.5
+  comment_format:
+    - xform/^.+$//
+
+custom_phrase:
+  dictionary: ""
+  user_dict: custom_phrase
+  db_class: stabledb
+  enable_completion: false
+  enable_sentence: false
+  initial_quality: 99
+
+emoji:
+  option_name: emoji
+  opencc_config: emoji.json
+  inherit_comment: false
+
+traditionalize:
+  option_name: traditionalization
+  opencc_config: s2t.json
+  tips: none
+  tags: [ abc, number, gregorian_to_lunar ]
+  excluded_types: [ juzi ]    # 博山:整句联想自己给原文繁体,不再转
+
+# 博山:篆。候选直接换成小篆字符;候选旁注出今字,认得是哪个字
+seal:
+  option_name: seal
+  opencc_config: s2seal.json
+  tips: all
+  tags: [ abc, number, gregorian_to_lunar ]
+  excluded_types: [ juzi ]    # 整句联想在篆模式下给的是原文繁体,由下面这个再转
+  comment_format:
+    - xform/^/〔/
+    - xform/$/〕/
+
+punctuator:
+  __include: default:/punctuator
+  full_shape:
+    __include: default:/punctuator/full_shape
+  half_shape:
+    __include: default:/punctuator/half_shape
+  symbols:
+    __include: symbols_v:/symbols
+
+radical_lookup:
+  tag: radical_lookup
+  dictionary: radical_pinyin
+  enable_user_dict: false
+  prefix: "uU"
+  tips: "  〔拆字〕"
+  comment_format:
+    - erase/^.*$//
+
+radical_reverse_lookup:
+  tags: [ radical_lookup ]
+  dictionary: boshan
+
+recognizer:
+  import_preset: default
+  patterns:
+    punct: "^v([0-9]|10|[A-Za-z]+)$"
+    radical_lookup: "^uU[a-z]+$"
+    unicode: "^U[a-f0-9]+"
+    number: "^R[0-9]+[.]?[0-9]*"
+    calculator: "^cC.+"
+    gregorian_to_lunar: "^N[0-9]{1,8}"
+
+# 博山:Ctrl+Shift+4 简 → 繁 → 篆 轮换、Ctrl+Shift+5 小篆提示开关、Ctrl+Shift+6 篆图开关,由 lua/boshan/prefs.lua 处理
+# (default.custom.yaml 去掉了雾凇里 Ctrl+Shift+4 单切繁体的绑定)
+key_binder:
+  import_preset: default
+  search: "`"
+
+editor:
+  bindings:
+    space: confirm
+    Return: commit_raw_input
+    Control+Return: commit_script_text
+    Control+Shift+Return: commit_comment
+    BackSpace: revert
+    Delete: delete
+    Control+BackSpace: back_syllable
+    Control+Delete: delete_candidate
+    Escape: cancel
+
+speller:
+  alphabet: zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA`
+  initials: zyxwvutsrqponmlkjihgfedcbaZYXWVUTSRQPONMLKJIHGFEDCBA
+  delimiter: " '"
+  algebra:
+    __include: rime_ice.schema:/speller/algebra   # 拼写运算原样用雾凇的(全拼、简拼、常见错拼容错)

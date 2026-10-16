@@ -1,0 +1,42 @@
+# 博山输入法叠在雾凇拼音 default.yaml 上的补丁(桌面端:小狼毫 / 鼠须管)。安卓键盘用 android/default.custom.yaml。
+patch:
+  schema_list:
+    - schema: boshan
+  menu/page_size: 7
+  switcher/caption: 「博山」
+  switcher/fold_options: false
+  # 简 / 繁 / 篆 三态都要记住;小篆提示(seal_hint)由 lua/boshan/prefs.lua 自己记,不放这里
+  switcher/save_options:
+    - ascii_punct
+    - simplification
+    - traditionalization
+    - seal
+    - emoji
+    - full_shape
+    - search_single_char
+  # 去掉雾凇里 Ctrl+Shift+4 单切繁体的两条(会把三态弄乱),这组快捷键改由 lua/boshan/prefs.lua 处理
+  key_binder/bindings:
+    - { when: composing, accept: Shift+Tab, send: Shift+Left }
+    - { when: composing, accept: Tab, send: Shift+Right }
+    - { when: composing, accept: Alt+Left, send: Shift+Left }
+    - { when: composing, accept: Alt+Right, send: Shift+Right }
+    - { when: has_menu, accept: minus, send: Page_Up }
+    - { when: has_menu, accept: equal, send: Page_Down }
+    - { when: always, toggle: ascii_punct, accept: Control+Shift+3 }
+    - { when: always, toggle: ascii_punct, accept: Control+Shift+numbersign }
+    - { accept: KP_0, send: 0, when: composing }
+    - { accept: KP_1, send: 1, when: composing }
+    - { accept: KP_2, send: 2, when: composing }
+    - { accept: KP_3, send: 3, when: composing }
+    - { accept: KP_4, send: 4, when: composing }
+    - { accept: KP_5, send: 5, when: composing }
+    - { accept: KP_6, send: 6, when: composing }
+    - { accept: KP_7, send: 7, when: composing }
+    - { accept: KP_8, send: 8, when: composing }
+    - { accept: KP_9, send: 9, when: composing }
+    - { accept: KP_Decimal, send: period, when: composing }
+    - { accept: KP_Multiply, send: asterisk, when: composing }
+    - { accept: KP_Add, send: plus, when: composing }
+    - { accept: KP_Subtract, send: minus, when: composing }
+    - { accept: KP_Divide, send: slash, when: composing }
+    - { accept: KP_Enter, send: Return, when: composing }

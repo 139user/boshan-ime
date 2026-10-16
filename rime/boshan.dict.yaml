@@ -1,0 +1,16 @@
+# Rime dictionary
+# encoding: utf-8
+#
+# 博山拼音主词库:雾凇拼音的字表与词库(不带腾讯词向量大词库,手机上部署太久),
+# 加典籍里出现的《通用规范汉字表》以外的字(不挂整个 41448 大字表,手机上部署太慢),再加先秦儒道典籍里的小句。
+---
+name: boshan
+version: "1.0"
+import_tables:
+  - cn_dicts/8105
+  - cn_dicts/boshan_chars     # 典籍生僻字,tools/build-juzi.ts 生成
+  - cn_dicts/base
+  - cn_dicts/ext
+  - cn_dicts/others
+  - cn_dicts/boshan_classics  # 典籍小句,tools/build-juzi.ts 生成
+...

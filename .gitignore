@@ -1,0 +1,13 @@
+.cache/
+build/
+node_modules/
+*.part
+android/ime/src/main/assets/
+android/ime/src/main/cpp/prebuilt/
+android/**/build/
+android/.gradle/
+android/.cxx/
+android/**/.cxx/
+android/local.properties
+android/keystore.properties
+*.jks

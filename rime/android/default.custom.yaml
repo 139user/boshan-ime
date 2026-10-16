@@ -1,0 +1,18 @@
+# 博山输入法安卓键盘叠在雾凇拼音 default.yaml 上的补丁。只留博山方案;候选一页 9 个,键盘上横着滑,
+# 翻页按候选条右边的箭头(键盘自己发 Page_Down / Page_Up);方案选单与切换热键在手机上用不着,全关。
+patch:
+  schema_list:
+    - schema: boshan
+  menu/page_size: 9
+  switcher/hotkeys: []
+  switcher/save_options:
+    - ascii_punct
+    - simplification
+    - traditionalization
+    - seal
+    - emoji
+    - full_shape
+    - search_single_char
+  # Shift 由键盘自己处理(大写直接上屏),不让引擎拿它切中英文
+  ascii_composer/switch_key/Shift_L: noop
+  ascii_composer/switch_key/Shift_R: noop
